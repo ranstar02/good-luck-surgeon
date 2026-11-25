@@ -9,6 +9,10 @@ import os
 
 EPITAPH = "I told the surgeon 'good luck'. He needed it."
 
+# Competition gate: the epitaph must be a single line of 1-150 characters.
+# (UTF-8, not just whitespace; no trailing newline in the output file.)
+MAX_CHARS = 150
+
 OUTPUT_PATH = "/output/entry.txt"
 
 
@@ -16,7 +20,9 @@ def main():
     epitaph = EPITAPH
     assert epitaph.strip(), "epitaph must not be empty or only whitespace"
     assert "\n" not in epitaph and "\r" not in epitaph, "epitaph must be a single line"
-    assert 1 <= len(epitaph) <= 150, "epitaph must be 1-150 characters, got %d" % len(epitaph)
+    assert 1 <= len(epitaph) <= MAX_CHARS, (
+        "epitaph must be 1-%d characters, got %d" % (MAX_CHARS, len(epitaph))
+    )
 
     parent = os.path.dirname(OUTPUT_PATH)
     if parent:
@@ -30,7 +36,7 @@ def main():
     assert written == epitaph, "verification failed: file content differs from EPITAPH"
     assert "\n" not in written and "\r" not in written, "verification failed: file is not a single line"
 
-    print("%d characters" % len(epitaph))
+    print("Wrote %d characters to %s:" % (len(epitaph), OUTPUT_PATH))
     print(epitaph)
 
 
